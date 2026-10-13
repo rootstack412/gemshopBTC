@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Manage Inventory — Beneath the Crescent</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* Using the Purple & Blue Palette from the Dashboard[cite: 1, 2] */
+    :root {
+      --bg-main: #F4F3F9;
+      --bg-panel: #FFFFFF;
+      --sidebar-deep: #1A1B3A;
+      --text-main: #2D2D44;
+      --text-muted: #6B6B8E;
+      --primary-purple: #7C4DFF;
+      --primary-light: #B388FF;
+      --ruby: #FF5252;
+      --emerald: #00C853;
+      --sapphire: #2979FF;
+      --amber: #FFAB00;
+      --font-display: 'Cormorant Garamond', serif;
+      --font-body: 'Outfit', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-main);
+      color: var(--text-main);
+      margin: 0;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Mirroring Dashboard[cite: 2] */
+    .admin-sidebar {
+      background: linear-gradient(180deg, var(--sidebar-deep) 0%, #0F1021 100%);
+      color: #F0F0FF;
+      padding: 2rem 0;
+    }
+
+    .sidebar-brand { padding: 0 1.5rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 2rem; }
+    .sidebar-brand h1 { font-family: var(--font-display); font-size: 1.75rem; color: var(--primary-light); font-style: italic; }
+
+    .nav-menu { list-style: none; padding: 0; }
+    .nav-menu a {
+      display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1.5rem;
+      color: #A0A0C0; text-decoration: none; border-right: 4px solid transparent;
+    }
+    .nav-menu a.active { background: rgba(124, 77, 255, 0.15); color: white; border-right-color: var(--primary-purple); }
+
+    /* Inventory Specific Styles[cite: 2] */
+    .admin-main { padding: 2.5rem 3rem; }
+    .inventory-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    
+    .panel { background: white; border-radius: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #E6E6F2; }
+    
+    .inventory-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .inventory-table th { padding: 1.25rem 1.5rem; background: #F9F9FF; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid #F0F0F8; }
+    .inventory-table td { padding: 1.25rem 1.5rem; border-bottom: 1px solid #F0F0F8; font-size: 0.9rem; vertical-align: middle; }
+    
+    .btn { padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 500; cursor: pointer; border: none; font-family: var(--font-body); }
+    .btn-primary { background: var(--primary-purple); color: white; }
+    
+    .gem-indicator { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+    .status-tag { padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+    .tag-stock { background: rgba(0, 200, 83, 0.1); color: #00A343; }
+  </style>
+</head>
+<body>
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand">
+      <h1>Beneath the Crescent</h1>
+      <p style="font-size: 0.75rem; color: var(--text-muted);">Admin Panel</p>
+    </div>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="admin-dashboard.html">Dashboard</a></li>
+        <li><a href="#" class="active">Gemstones</a></li>
+        <li><a href="#">Jewelry</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="inventory-header">
+      <h2 style="font-family: var(--font-display); font-size: 2.2rem; color: var(--sidebar-deep);">Gemstone Inventory</h2>
+      <button class="btn btn-primary">+ Add New Gem</button>
+    </div>
+
+    <div class="panel">
+      <table class="inventory-table">
+        <thead>
+          <tr>
+            <th>Gem / Variety</th>
+            <th>Carat</th>
+            <th>Clarity</th>
+            <th>Origin</th>
+            <th>Treatment</th>
+            <th>Certificate</th>
+            <th>Price</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="gem-indicator" style="background: var(--ruby);"></span> <strong>Burmese Ruby</strong><br><small>Pigeon Blood</small></td>
+            <td>2.14ct</td>
+            <td>VVS1</td>
+            <td>Myanmar</td>
+            <td>Unheated</td>
+            <td>GIA</td>
+            <td>$8,500</td>
+            <td><span class="status-tag tag-stock">In Stock</span></td>
+          </tr>
+          <tr>
+            <td><span class="gem-indicator" style="background: var(--emerald);"></span> <strong>Colombian Emerald</strong><br><small>Muzo Green</small></td>
+            <td>3.45ct</td>
+            <td>Minor Oil</td>
+            <td>Colombia</td>
+            <td>Insignificant</td>
+            <td>GRS</td>
+            <td>$12,200</td>
+            <td><span class="status-tag tag-stock" style="background: rgba(41,121,255,0.1); color: var(--sapphire);">Reserved</span></td>
+          </tr>
+          <tr>
+            <td><span class="gem-indicator" style="background: var(--sapphire);"></span> <strong>Ceylon Sapphire</strong><br><small>Royal Blue</small></td>
+            <td>4.12ct</td>
+            <td>Eye Clean</td>
+            <td>Sri Lanka</td>
+            <td>Heat Only</td>
+            <td>SSEF</td>
+            <td>$9,800</td>
+            <td><span class="status-tag tag-stock">In Stock</span></td>
+          </tr>
+          <tr>
+            <td><span class="gem-indicator" style="background: var(--amber);"></span> <strong>Imperial Topaz</strong><br><small>Brazilian Peach</small></td>
+            <td>6.50ct</td>
+            <td>IF</td>
+            <td>Brazil</td>
+            <td>None</td>
+            <td>None</td>
+            <td>$4,200</td>
+            <td><span class="status-tag tag-stock" style="background: rgba(255,171,0,0.1); color: #B27700;">Low Stock</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

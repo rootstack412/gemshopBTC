@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin — Beneath the Crescent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* Palette based on "Beneath the Crescent" brand identity[cite: 1, 2] */
+      --bg-main: #F4F3F9;
+      --bg-panel: #FFFFFF;
+      --sidebar-deep: #1A1B3A;
+      --sidebar-accent: #2D2E5F;
+      
+      --text-main: #2D2D44;
+      --text-muted: #6B6B8E;
+      --text-light: #F0F0FF;
+      
+      --primary-purple: #7C4DFF;
+      --primary-light: #B388FF;
+      --accent-blue: #448AFF;
+      
+      --ruby: #FF5252;
+      --emerald: #00C853;
+      --sapphire: #2979FF;
+      --amber: #FFAB00;
+      
+      --font-display: 'Cormorant Garamond', serif;
+      --font-body: 'Outfit', sans-serif;
+      
+      --shadow-sm: 0 2px 4px rgba(26, 27, 58, 0.05);
+      --shadow-md: 0 8px 16px rgba(26, 27, 58, 0.08);
+      --shadow-lg: 0 12px 32px rgba(26, 27, 58, 0.12);
+    }
+    
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-main);
+      background: var(--bg-main);
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .admin-sidebar {
+      background: linear-gradient(180deg, var(--sidebar-deep) 0%, #0F1021 100%);
+      color: var(--text-light);
+      padding: 2rem 0;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+    
+    .sidebar-brand {
+      padding: 0 1.5rem 2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 2rem;
+    }
+    
+    .sidebar-brand h1 {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 600;
+      font-style: italic;
+      color: var(--primary-light);
+      margin-bottom: 0.25rem;
+      letter-spacing: 0.02em;
+    }
+    
+    .sidebar-brand p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    
+    .nav-section { margin-bottom: 2.5rem; }
+    
+    .nav-section-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #5C5C8D;
+      padding: 0 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .nav-menu { list-style: none; }
+    
+    .nav-menu a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      color: #A0A0C0;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      border-right: 4px solid transparent;
+    }
+    
+    .nav-menu a:hover {
+      background: rgba(124, 77, 255, 0.1);
+      color: white;
+    }
+    
+    .nav-menu a.active {
+      background: rgba(124, 77, 255, 0.15);
+      color: white;
+      border-right: 4px solid var(--primary-purple);
+      font-weight: 500;
+    }
+    
+    .nav-icon {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+    
+    .badge {
+      margin-left: auto;
+      background: var(--primary-purple);
+      color: white;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+    }
+    
+    /* Main Content */
+    .admin-main { padding: 2.5rem 3rem; }
+    
+    .admin-header {
+      margin-bottom: 3rem;
+      border-bottom: 1px solid #DEDEEF;
+      padding-bottom: 2rem;
+    }
+    
+    .admin-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    
+    .admin-title {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: var(--sidebar-deep);
+    }
+    
+    .admin-subtitle { color: var(--text-muted); font-size: 0.95rem; }
+    
+    .admin-actions { display: flex; gap: 0.75rem; }
+    
+    .btn {
+      padding: 0.65rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+    
+    .btn-primary {
+      background: var(--primary-purple);
+      color: white;
+      box-shadow: 0 4px 12px rgba(124, 77, 255, 0.3);
+    }
+    
+    .btn-secondary {
+      background: white;
+      color: var(--sidebar-deep);
+      border: 1px solid #DEDEEF;
+    }
+    
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    
+    .stat-card {
+      background: var(--bg-panel);
+      padding: 1.75rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #E6E6F2;
+    }
+    
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+    
+    .stat-value { font-family: var(--font-display); font-size: 2.5rem; font-weight: 600; color: var(--sidebar-deep); line-height: 1; }
+    
+    .stat-change.positive { color: var(--emerald); font-size: 0.85rem; }
+    .stat-change.negative { color: var(--ruby); font-size: 0.85rem; }
+    
+    /* Panels */
+    .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+    
+    .panel {
+      background: var(--bg-panel);
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #E6E6F2;
+      overflow: hidden;
+    }
+    
+    .panel-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #E6E6F2;
+      background: rgba(243, 242, 247, 0.5);
+    }
+    
+    .panel-title { font-family: var(--font-display); font-size: 1.5rem; color: var(--sidebar-deep); }
+    
+    /* Inventory Table */
+    .inventory-table { width: 100%; border-collapse: collapse; }
+    .inventory-table th { padding: 1rem 1.5rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); background: #F9F9FF; }
+    .inventory-table td { padding: 1.25rem 1.5rem; border-bottom: 1px solid #F0F0F8; font-size: 0.9rem; }
+    
+    .gem-indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 0.5rem; }
+    .gem-indicator.ruby { background: var(--ruby); }
+    .gem-indicator.emerald { background: var(--emerald); }
+    .gem-indicator.sapphire { background: var(--sapphire); }
+    .gem-indicator.topaz { background: var(--amber); }
+
+    .status-tag { padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+    .status-tag.in-stock { background: rgba(0, 200, 83, 0.1); color: #00A343; }
+    .status-tag.reserved { background: rgba(41, 121, 255, 0.1); color: var(--sapphire); }
+    .status-tag.low-stock { background: rgba(255, 171, 0, 0.1); color: #B27700; }
+  </style>
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <h1>Beneath the Crescent</h1>
+        <p>Admin Panel</p>
+      </div>
+      <nav>
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <ul class="nav-menu">
+            <li><a href="#" class="active"><svg class="nav-icon" viewBox="0 0 24 24" stroke="currentColor" fill="none"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg> Dashboard</a></li>
+            <li><a href="#"><svg class="nav-icon" viewBox="0 0 24 24" stroke="currentColor" fill="none"><path d="M3 12h4l3 9 4-18 3 9h4"/></svg> Analytics</a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Inventory</div>
+          <ul class="nav-menu">
+            <li>
+  <a href="admin-inventory.html">
+    <svg class="nav-icon" viewBox="0 0 24 24" stroke="currentColor" fill="none">
+      <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/>
+    </svg> 
+    Gemstones
+  </a>
+</li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">Orders</div>
+          <ul class="nav-menu">
+            <li><a href="#"> <svg class="nav-icon" viewBox="0 0 24 24" stroke="currentColor" fill="none"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg> All Orders <span class="badge">3</span></a></li>
+          </ul>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div class="admin-header-top">
+          <div>
+            <h2 class="admin-title">Dashboard</h2>
+            <p class="admin-subtitle">Welcome back — here's what's happening today</p>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-secondary">Search</button>
+            <button class="btn btn-primary">Add Item</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Total Inventory</div><div class="stat-value">247</div><div class="stat-change positive">↑ 12 this week</div></div>
+        <div class="stat-card"><div class="stat-label">Active Orders</div><div class="stat-value">8</div><div class="stat-change positive">↑ 3 new</div></div>
+        <div class="stat-card"><div class="stat-label">Pending Inquiries</div><div class="stat-value">5</div><div class="stat-change negative">↓ 2 resolved</div></div>
+        <div class="stat-card"><div class="stat-label">Revenue (MTD)</div><div class="stat-value">$18.4k</div><div class="stat-change positive">↑ 22% vs last</div></div>
+      </div>
+
+      <div class="content-grid">
+        <div class="panel">
+          <div class="panel-header"><h3 class="panel-title">Recent Inventory</h3></div>
+          <table class="inventory-table">
+            <thead><tr><th>Item</th><th>Carat</th><th>Cut</th><th>Price</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td><span class="gem-indicator ruby"></span> Burmese Ruby</td><td>2.14ct</td><td>Cushion</td><td>$8,500</td><td><span class="status-tag in-stock">In Stock</span></td></tr>
+              <tr><td><span class="gem-indicator emerald"></span> Colombian Emerald</td><td>3.45ct</td><td>Oval</td><td>$12,200</td><td><span class="status-tag reserved">Reserved</span></td></tr>
+              <tr><td><span class="gem-indicator sapphire"></span> Kashmir Sapphire</td><td>1.98ct</td><td>Round</td><td>$15,800</td><td><span class="status-tag in-stock">In Stock</span></td></tr>
+              <tr><td><span class="gem-indicator topaz"></span> Imperial Topaz</td><td>4.20ct</td><td>Emerald</td><td>$3,200</td><td><span class="status-tag low-stock">Low Stock</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><h3 class="panel-title">Activity Feed</h3></div>
+          <div style="padding: 1.5rem; font-size: 0.9rem;">
+            <p style="margin-bottom: 1rem;"><strong>Sarah Chen</strong> placed order #1834</p>
+            <p style="margin-bottom: 1rem;">Added <strong>Burmese Ruby</strong> to stock</p>
+            <p><strong>New inquiry</strong> for custom ring</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

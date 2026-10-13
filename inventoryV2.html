@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shop — Beneath the Crescent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* Design System from styles.css[cite: 2] */
+    :root {
+      --bg-deep: #2a2440;
+      --bg-panel: #342e4c;
+      --bg-elevated: #403a5c;
+      --text: #faf8ff;
+      --text-muted: #c4bdd9;
+      --teal: #5ec8c4;
+      --teal-muted: #3a9e9a;
+      --pink: #ea8cc8;
+      --pink-soft: #d972b0;
+      --purple: #9b86ea;
+      --purple-deep: #6e54c8;
+      --yellow: #f2e078;
+      --accent: var(--teal);
+      --accent-tag: var(--pink);
+      --border: rgba(155, 134, 234, 0.32);
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-body: "Outfit", system-ui, sans-serif;
+      --radius: 12px;
+      --shadow: 0 20px 44px rgba(22, 14, 40, 0.28);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      color: var(--text);
+      background: var(--bg-deep);
+      background-image:
+        radial-gradient(ellipse 130% 90% at 50% -10%, rgba(94, 200, 196, 0.2), transparent 55%),
+        radial-gradient(ellipse 75% 60% at 100% 15%, rgba(155, 134, 234, 0.16), transparent 50%),
+        radial-gradient(ellipse 100% 80% at 50% 100%, rgba(242, 224, 120, 0.06), transparent 45%);
+      line-height: 1.65;
+    }
+
+    /* Header & Navigation[cite: 2] */
+    .site-header { 
+      position: sticky; top: 0; z-index: 50; 
+      background: rgba(42, 36, 64, 0.88); 
+      backdrop-filter: blur(12px); 
+      border-bottom: 1px solid var(--border); 
+    }
+    .header-inner { 
+      max-width: 1120px; margin: 0 auto; padding: 0.75rem 1.25rem; 
+      display: flex; align-items: center; justify-content: space-between; 
+    }
+    .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: var(--text); }
+    .brand-name { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; }
+
+    /* UI Components */
+    .cart-trigger {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.5rem 1.25rem;
+      border-radius: 999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .cart-trigger:hover { background: var(--purple-deep); }
+    .cart-count { background: var(--pink); color: white; padding: 0.1rem 0.55rem; border-radius: 10px; font-size: 0.8rem; }
+
+    main { max-width: 1120px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    
+    /* Category Sections[cite: 1] */
+    .category-section { margin-bottom: 4rem; }
+    .category-title { 
+      font-family: var(--font-display); 
+      font-size: 2rem; 
+      margin-bottom: 1.5rem; 
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--yellow);
+    }
+
+    .inventory-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+
+    /* Cards[cite: 2] */
+    .item-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 28px rgba(22, 14, 40, 0.18);
+    }
+    .item-tag { color: var(--pink); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
+    .item-title { font-family: var(--font-display); font-size: 1.35rem; margin: 0 0 0.5rem; }
+    .item-price { font-weight: 600; color: var(--teal); font-size: 1.1rem; margin-bottom: 1rem; }
+    .item-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; flex-grow: 1; }
+    
+    .btn-add {
+      background: linear-gradient(135deg, var(--purple-deep), var(--teal-muted));
+      border: none;
+      color: white;
+      padding: 0.7rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: filter 0.2s;
+    }
+    .btn-add:hover { filter: brightness(1.2); }
+
+    /* Toast Notification */
+    #toast {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: var(--teal);
+      color: var(--bg-deep);
+      text-align: center;
+      border-radius: 8px;
+      padding: 1rem;
+      position: fixed;
+      z-index: 200;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      font-weight: 600;
+      box-shadow: var(--shadow);
+    }
+    #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+
+    /* Checkout Overlay */
+    #checkout-view {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg-deep);
+      z-index: 100;
+      overflow-y: auto;
+      padding: 2rem 1.25rem;
+    }
+    .checkout-container { max-width: 800px; margin: 0 auto; }
+    .cart-item { 
+      display: flex; justify-content: space-between; padding: 1rem 0; 
+      border-bottom: 1px solid var(--border); 
+    }
+    
+    @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+    @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+  </style>
+</head>
+<body>
+
+<div id="toast">Added to Selection</div>
+
+<div class="layout-stack" id="shop-view">
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-text">
+          <span class="brand-name">Beneath the Crescent</span>
+        </span>
+      </a>
+      <button class="cart-trigger" onclick="toggleCheckout()">
+        My Cart <span class="cart-count" id="cart-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <header class="page-header" style="margin-bottom: 3rem;">
+      <h1 style="font-family: var(--font-display); font-size: 3rem;">Current Inventory</h1>
+      <p style="color: var(--text-muted);">Hand-selected stones and bespoke jewelry from our local studio[cite: 1].</p>
+    </header>
+
+    <!-- Section: Loose Stones[cite: 1] -->
+    <section class="category-section">
+      <h2 class="category-title">Loose Stones</h2>
+      <div class="inventory-grid">
+        <article class="item-card">
+          <span class="item-tag">Sapphire</span>
+          <h3 class="item-title">Teal Montana Sapphire</h3>
+          <p class="item-price">$840.00</p>
+          <p class="item-desc">1.2ct Round Brilliant. Responsibly sourced from Rock Creek[cite: 1].</p>
+          <button class="btn-add" onclick="addToCart('Teal Montana Sapphire', 840)">Add to Cart</button>
+        </article>
+        <article class="item-card">
+          <span class="item-tag">Garnet</span>
+          <h3 class="item-title">Malaia Garnet</h3>
+          <p class="item-price">$320.00</p>
+          <p class="item-desc">2.5ct Cushion Cut. Peachy-pink hue that shifts under warm light[cite: 1].</p>
+          <button class="btn-add" onclick="addToCart('Malaia Garnet', 320)">Add to Cart</button>
+        </article>
+        <article class="item-card">
+          <span class="item-tag">Tourmaline</span>
+          <h3 class="item-title">Mint Tourmaline</h3>
+          <p class="item-price">$510.00</p>
+          <p class="item-desc">Precision cut emerald shape. Exceptional clarity and vibrance[cite: 1].</p>
+          <button class="btn-add" onclick="addToCart('Mint Tourmaline', 510)">Add to Cart</button>
+        </article>
+        <article class="item-card">
+          <span class="item-tag">Zircon</span>
+          <h3 class="item-title">Blue Zircon</h3>
+          <p class="item-price">$290.00</p>
+          <p class="item-desc">Electric blue with high dispersion. 3.0ct Cambodian origin[cite: 1].</p>
+          <button class="btn-add" onclick="addToCart('Blue Zircon', 290)">Add to Cart</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- Section: Fine Jewelry[cite: 1] -->
+    <section class="category-section">
+      <h2 class="category-title">Fine Jewelry</h2>
+      <div class="inventory-grid">
+        <article class="item-card">
+          <span class="item-tag">Rings</span>
+          <h3 class="item-title">Crescent Moon Band</h3>
+          <p class="item-price">$1,250.00</p>
+          <p class="item-desc">14k Yellow Gold. Hand-hammered texture with scattered diamonds[cite: 1].</p>
+          <button class="btn-add" onclick="addToCart('Crescent Moon Band', 1250)">Add to Cart</button>
+        </article>
+        <article class="item-card">
+          <span class="item-tag">Earrings</span>
+          <h3 class="item-title">Sunburst Studs</h3>
+          <p class="item-price">$680.00</p>
+          <p class="item-desc">Pair of 14k White Gold studs with white sapphire centers[cite: 1].</p>
+          <button class="btn-add" onclick="addToCart('Sunburst Studs', 680)">Add to Cart</button>
+        </article>
+        <article class="item-card">
+          <span class="item-tag">Necklaces</span>
+          <h3 class="item-title">Solitaire Drop</h3>
+          <p class="item-price">$450.00</p>
+          <p class="item-desc">Floating bezel set Amethyst on a delicate 16-inch gold chain[cite: 1].</p>
+          <button class="btn-add" onclick="addToCart('Solitaire Drop', 450)">Add to Cart</button>
+        </article>
+        <article class="item-card">
+          <span class="item-tag">Rings</span>
+          <h3 class="item-title">Textured Gold Stacker</h3>
+          <p class="item-price">$195.00</p>
+          <p class="item-desc">Perfect for layering. Recycled 14k Rose Gold[cite: 1].</p>
+          <button class="btn-add" onclick="addToCart('Gold Stacker', 195)">Add to Cart</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- Section: Collector Pieces[cite: 1] -->
+    <section class="category-section">
+      <h2 class="category-title">One-of-a-kind</h2>
+      <div class="inventory-grid">
+        <article class="item-card">
+          <span class="item-tag">Rare Species</span>
+          <h3 class="item-title">Color-Shift Alexandrite</h3>
+          <p class="item-price">$2,400.00</p>
+          <p class="item-desc">GIA Certified. Significant shift from teal-green to purplish-red[cite: 1].</p>
+          <button class="btn-add" onclick="addToCart('Alexandrite', 2400)">Add to Cart</button>
+        </article>
+        <article class="item-card">
+          <span class="item-tag">Artisan Cut</span>
+          <h3 class="item-title">"Void" Cut Smoky Quartz</h3>
+          <p class="item-price">$375.00</p>
+          <p class="item-desc">Experimental geometric faceting by our in-house cutter[cite: 1].</p>
+          <button class="btn-add" onclick="addToCart('Void Quartz', 375)">Add to Cart</button>
+        </article>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Checkout Overlay -->
+<div id="checkout-view">
+  <div class="checkout-container">
+    <button onclick="toggleCheckout()" style="background:none; border:none; color:var(--teal); cursor:pointer; font-weight:600; margin-bottom:2rem;">&larr; Return to Shopping</button>
+    
+    <h1 style="font-family: var(--font-display);">Your Curated Selection</h1>
+    <div id="cart-items-list" style="margin: 2rem 0; border-top: 1px solid var(--border);"></div>
+
+    <div style="text-align: right; margin-top: 1.5rem; font-size: 1.25rem;">
+      <p style="color:var(--text-muted)">Total: <span id="total-price" style="color:var(--yellow); font-weight:600;">$0.00</span></p>
+    </div>
+
+    <form style="margin-top: 3rem; background: var(--bg-panel); padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border);">
+      <h2 style="font-family: var(--font-display); margin-top: 0;">Inquiry Details</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">As items are unique, completing this form will notify us to hold the items for you[cite: 1].</p>
+      <div style="margin-bottom:1rem;">
+        <label style="display:block; font-size:0.8rem; color:var(--text-muted); margin-bottom:0.3rem;">Name</label>
+        <input type="text" style="width:100%; padding:0.8rem; background:var(--bg-elevated); border:1px solid var(--border); border-radius:8px; color:white;">
+      </div>
+      <div style="margin-bottom:1.5rem;">
+        <label style="display:block; font-size:0.8rem; color:var(--text-muted); margin-bottom:0.3rem;">Email</label>
+        <input type="email" style="width:100%; padding:0.8rem; background:var(--bg-elevated); border:1px solid var(--border); border-radius:8px; color:white;">
+      </div>
+      <button type="button" class="btn-add" style="width:100%; padding:1rem;" onclick="alert('Inquiry sent! We will reach out shortly.')">Send Inquiry</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  let cart = [];
+
+  function addToCart(name, price) {
+    cart.push({ name, price });
+    updateCartUI();
+    showToast(`${name} added!`);
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.innerText = msg;
+    toast.className = "show";
+    setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+  }
+
+  function updateCartUI() {
+    document.getElementById('cart-count').innerText = cart.length;
+    const list = document.getElementById('cart-items-list');
+    const totalEl = document.getElementById('total-price');
+    list.innerHTML = cart.length === 0 ? '<p style="padding:2rem 0;">No items selected.</p>' : '';
+    
+    let total = 0;
+    cart.forEach((item, index) => {
+      total += item.price;
+      const row = document.createElement('div');
+      row.className = 'cart-item';
+      row.innerHTML = `
+        <span>${item.name}</span>
+        <div>
+          <span style="margin-right:1rem;">$${item.price.toFixed(2)}</span>
+          <button onclick="removeItem(${index})" style="background:none; border:none; color:var(--pink); cursor:pointer;">&times;</button>
+        </div>
+      `;
+      list.appendChild(row);
+    });
+    totalEl.innerText = `$${total.toFixed(2)}`;
+  }
+
+  function removeItem(index) {
+    cart.splice(index, 1);
+    updateCartUI();
+  }
+
+  function toggleCheckout() {
+    const shop = document.getElementById('shop-view');
+    const checkout = document.getElementById('checkout-view');
+    const isShowing = checkout.style.display === 'block';
+    checkout.style.display = isShowing ? 'none' : 'block';
+    shop.style.display = isShowing ? 'flex' : 'none';
+    window.scrollTo(0, 0);
+  }
+</script>
+
+</body>
+</html>

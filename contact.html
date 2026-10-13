@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact — Beneath the Crescent</title>
+  <meta name="description" content="Contact Beneath the Crescent — hours, location, form, and Facebook." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="layout-stack">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html">
+          <img src="btc%20logo.jpg" alt="Beneath the Crescent logo" width="52" height="52" />
+          <span class="brand-text">
+            <span class="brand-name">Beneath the Crescent</span>
+            <span class="brand-tag">Gems &amp; Jewelry</span>
+          </span>
+        </a>
+        <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+        <nav class="site-nav" id="primary-nav" aria-label="Primary">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="inventory.html">Inventory</a></li>
+            <li><a href="process.html">From Earth to Jewel</a></li>
+            <li><a href="gem-care.html">Gem Care</a></li>
+            <li><a href="contact.html" aria-current="page">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <header class="page-header">
+        <h1>Contact</h1>
+        <p>Visit the showroom, send a note, or say hello on social. Replace placeholder address and phone with your real details.</p>
+      </header>
+
+      <div class="split">
+        <div>
+          <span class="mock-badge">Form mockup — not wired to email yet</span>
+          <form class="contact-form" action="#" method="post" onsubmit="event.preventDefault(); alert('This is a static mockup. Connect the form to your email or a form service when you go live.');">
+            <div>
+              <label for="name">Name</label>
+              <input id="name" name="name" type="text" autocomplete="name" required />
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </div>
+            <div>
+              <label for="msg">Message</label>
+              <textarea id="msg" name="message" required placeholder="Ask about a stone, request an appointment, or say what you are looking for."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send message</button>
+          </form>
+        </div>
+        <aside class="contact-aside">
+          <h2>Visit &amp; hours</h2>
+          <address>
+            123 Crescent Row<br />
+            Your City, ST 00000
+          </address>
+          <p><strong>Phone:</strong> (000) 000-0000</p>
+          <p><strong>Hours:</strong> Tue–Sat 10–6 · Sun–Mon closed <em>(example)</em></p>
+          <div class="social-row">
+            <a class="btn btn-ghost" href="https://www.facebook.com/beneaththecrescent/" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a class="btn btn-ghost" href="index.html">Directions (add map link)</a>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span>&copy; Beneath the Crescent</span>
+        <a href="https://www.facebook.com/beneaththecrescent/" target="_blank" rel="noopener noreferrer">facebook.com/beneaththecrescent</a>
+      </div>
+    </footer>
+  </div>
+  <script src="js/nav.js"></script>
+</body>
+</html>

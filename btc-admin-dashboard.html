@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin — Beneath the Crescent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* Beneath the Crescent Admin — matching the mystical dark theme */
+    :root {
+      --bg-deep: #2a2440;
+      --bg-panel: #342e4c;
+      --bg-elevated: #403a5c;
+      --text: #faf8ff;
+      --text-muted: #c4bdd9;
+      --teal: #5ec8c4;
+      --teal-muted: #3a9e9a;
+      --pink: #ea8cc8;
+      --pink-soft: #d972b0;
+      --purple: #9b86ea;
+      --purple-deep: #6e54c8;
+      --yellow: #f2e078;
+      --accent: var(--teal);
+      --accent-tag: var(--pink);
+      --border: rgba(155, 134, 234, 0.32);
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-body: "Outfit", system-ui, sans-serif;
+      --radius: 12px;
+      --shadow: 0 20px 44px rgba(22, 14, 40, 0.28);
+    }
+    
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg-deep);
+      background-image:
+        radial-gradient(ellipse 130% 90% at 50% -10%, rgba(94, 200, 196, 0.2), transparent 55%),
+        radial-gradient(ellipse 75% 60% at 100% 15%, rgba(155, 134, 234, 0.16), transparent 50%),
+        radial-gradient(ellipse 70% 55% at 0% 85%, rgba(234, 140, 200, 0.14), transparent 50%),
+        radial-gradient(ellipse 100% 80% at 50% 100%, rgba(242, 224, 120, 0.06), transparent 45%);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .admin-sidebar {
+      background: linear-gradient(165deg, rgba(42, 36, 64, 0.95) 0%, rgba(52, 46, 76, 0.92) 100%);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid var(--border);
+      padding: 2rem 0;
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+    
+    .admin-sidebar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30l15-15M30 30l-15 15M30 30l15 15M30 30l-15-15' stroke='rgba(94,200,196,0.04)' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    .sidebar-brand {
+      padding: 0 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    
+    .sidebar-brand h1 {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 600;
+      font-style: italic;
+      background: linear-gradient(135deg, var(--teal), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.25rem;
+      letter-spacing: 0.02em;
+    }
+    
+    .sidebar-brand p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    
+    .nav-section {
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    
+    .nav-section-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--purple);
+      padding: 0 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .nav-menu {
+      list-style: none;
+    }
+    
+    .nav-menu a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 400;
+      transition: all 0.25s ease;
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+    
+    .nav-menu a:hover {
+      background: rgba(94, 200, 196, 0.08);
+      color: var(--teal);
+      border-left-color: var(--teal);
+    }
+    
+    .nav-menu a.active {
+      background: linear-gradient(90deg, rgba(94, 200, 196, 0.15), rgba(155, 134, 234, 0.08));
+      color: var(--teal);
+      border-left-color: var(--teal);
+      font-weight: 500;
+      box-shadow: 0 0 0 1px rgba(242, 224, 120, 0.15);
+    }
+    
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      flex-shrink: 0;
+    }
+    
+    .badge {
+      margin-left: auto;
+      background: linear-gradient(135deg, var(--pink), var(--pink-soft));
+      color: white;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 10px;
+      font-weight: 600;
+      box-shadow: 0 0 8px rgba(234, 140, 200, 0.4);
+    }
+    
+    /* Main Content */
+    .admin-main {
+      padding: 2.5rem 3rem;
+      overflow-y: auto;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .admin-header {
+      margin-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2rem;
+    }
+    
+    .admin-header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    
+    .admin-title {
+      font-family: var(--font-display);
+      font-size: 2.75rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.02em;
+    }
+    
+    .admin-subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      font-weight: 300;
+    }
+    
+    .admin-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+    
+    .btn {
+      padding: 0.65rem 1.5rem;
+      border: none;
+      border-radius: 999px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--purple-deep), var(--teal-muted));
+      color: var(--text);
+      box-shadow: 0 0 0 1px rgba(242, 224, 120, 0.35);
+    }
+    
+    .btn-primary:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 0 1px rgba(242, 224, 120, 0.55), 0 8px 24px rgba(155, 134, 234, 0.3);
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background: var(--bg-elevated);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--bg-panel);
+      border-color: var(--purple);
+      color: var(--teal);
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    
+    .stat-card {
+      background: var(--bg-panel);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 24px 52px rgba(22, 14, 40, 0.35);
+      border-color: var(--purple);
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--pink));
+    }
+    
+    .stat-card.accent-pink::before {
+      background: linear-gradient(90deg, var(--pink), var(--pink-soft));
+    }
+    
+    .stat-card.accent-purple::before {
+      background: linear-gradient(90deg, var(--purple-deep), var(--purple));
+    }
+    
+    .stat-card.accent-yellow::before {
+      background: linear-gradient(90deg, var(--yellow), #f5d442);
+    }
+    
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--purple);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
+    
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 2.75rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-change {
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    
+    .stat-change.positive {
+      color: var(--teal);
+    }
+    
+    .stat-change.negative {
+      color: var(--pink-soft);
+    }
+    
+    /* Content Grid */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .panel {
+      background: var(--bg-panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    
+    .panel-header {
+      padding: 1.75rem 2rem;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(to bottom, rgba(64, 58, 92, 0.5), transparent);
+    }
+    
+    .panel-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+    
+    .panel-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    
+    .panel-body {
+      padding: 0;
+    }
+    
+    /* Inventory Table */
+    .inventory-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .inventory-table thead {
+      background: rgba(64, 58, 92, 0.3);
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .inventory-table th {
+      padding: 1rem 1.5rem;
+      text-align: left;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--purple);
+    }
+    
+    .inventory-table td {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(155, 134, 234, 0.15);
+      font-size: 0.9rem;
+    }
+    
+    .inventory-table tbody tr {
+      transition: background 0.2s ease;
+    }
+    
+    .inventory-table tbody tr:hover {
+      background: rgba(94, 200, 196, 0.05);
+    }
+    
+    .gem-name {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .gem-type {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+      font-family: var(--font-display);
+    }
+    
+    .gem-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+      box-shadow: 0 0 12px currentColor;
+      animation: gemPulse 3s ease-in-out infinite;
+    }
+    
+    @keyframes gemPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    .gem-indicator.ruby {
+      background: radial-gradient(circle at 30% 30%, #ff6b9d, #d93667);
+      color: #ff6b9d;
+    }
+    
+    .gem-indicator.emerald {
+      background: radial-gradient(circle at 30% 30%, #50e3c2, #2da88c);
+      color: #50e3c2;
+    }
+    
+    .gem-indicator.sapphire {
+      background: radial-gradient(circle at 30% 30%, #6ba3ff, #3d5afe);
+      color: #6ba3ff;
+    }
+    
+    .gem-indicator.topaz {
+      background: radial-gradient(circle at 30% 30%, var(--yellow), #e0b020);
+      color: var(--yellow);
+    }
+    
+    .status-tag {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .status-tag.in-stock {
+      background: rgba(94, 200, 196, 0.15);
+      color: var(--teal);
+      border: 1px solid rgba(94, 200, 196, 0.3);
+    }
+    
+    .status-tag.low-stock {
+      background: rgba(242, 224, 120, 0.15);
+      color: var(--yellow);
+      border: 1px solid rgba(242, 224, 120, 0.3);
+    }
+    
+    .status-tag.reserved {
+      background: rgba(155, 134, 234, 0.15);
+      color: var(--purple);
+      border: 1px solid rgba(155, 134, 234, 0.3);
+    }
+    
+    /* Activity Feed */
+    .activity-feed {
+      padding: 1.5rem;
+    }
+    
+    .activity-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+      position: relative;
+    }
+    
+    .activity-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 16px;
+      top: 40px;
+      bottom: -16px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--border), transparent);
+    }
+    
+    .activity-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, rgba(94, 200, 196, 0.2), rgba(155, 134, 234, 0.2));
+      border: 2px solid var(--border);
+      box-shadow: 0 0 12px rgba(94, 200, 196, 0.25);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .activity-icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--teal);
+      stroke-width: 2;
+      fill: none;
+    }
+    
+    .activity-content {
+      flex: 1;
+    }
+    
+    .activity-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+      line-height: 1.5;
+    }
+    
+    .activity-text strong {
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    .activity-time {
+      font-size: 0.75rem;
+      color: var(--purple);
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      padding: 1.5rem;
+    }
+    
+    .quick-action {
+      padding: 1.5rem;
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      color: var(--text);
+      background: rgba(64, 58, 92, 0.3);
+    }
+    
+    .quick-action:hover {
+      border-color: var(--teal);
+      border-style: solid;
+      background: rgba(94, 200, 196, 0.1);
+      box-shadow: 0 0 24px rgba(94, 200, 196, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .quick-action svg {
+      width: 32px;
+      height: 32px;
+      stroke: var(--teal);
+      stroke-width: 2;
+      fill: none;
+      margin: 0 auto 0.75rem;
+      transition: transform 0.25s ease;
+    }
+    
+    .quick-action:hover svg {
+      transform: scale(1.1);
+    }
+    
+    .quick-action-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+    
+    .quick-action:hover .quick-action-label {
+      color: var(--teal);
+    }
+    
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+      }
+      
+      .admin-sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .admin-main {
+        padding: 1.5rem 1.25rem;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .admin-header-top {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      
+      .quick-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">
+        <h1>Beneath the Crescent</h1>
+        <p>Admin Panel</p>
+      </div>
+      
+      <nav>
+        <div class="nav-section">
+          <div class="nav-section-title">Overview</div>
+          <ul class="nav-menu">
+            <li>
+              <a href="#" class="active">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <rect x="3" y="3" width="7" height="7" rx="1"/>
+                  <rect x="14" y="3" width="7" height="7" rx="1"/>
+                  <rect x="14" y="14" width="7" height="7" rx="1"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1"/>
+                </svg>
+                Dashboard
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <path d="M3 12h4l3 9 4-18 3 9h4"/>
+                </svg>
+                Analytics
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Inventory</div>
+          <ul class="nav-menu">
+            <li>
+              <a href="#">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                  <polyline points="2 17 12 22 22 17"/>
+                  <polyline points="2 12 12 17 22 12"/>
+                </svg>
+                Gemstones
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <circle cx="12" cy="8" r="6"/>
+                  <path d="M15.5 8a3.5 3.5 0 11-7 0"/>
+                  <path d="M12 14v8"/>
+                </svg>
+                Jewelry
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <path d="M9 11l3 3L22 4"/>
+                  <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+                </svg>
+                Quality Control
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Orders</div>
+          <ul class="nav-menu">
+            <li>
+              <a href="#">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <circle cx="9" cy="21" r="1"/>
+                  <circle cx="20" cy="21" r="1"/>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
+                </svg>
+                All Orders
+                <span class="badge">3</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                Pickup & Delivery
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <rect x="2" y="7" width="20" height="14" rx="2"/>
+                  <path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+                </svg>
+                Custom Requests
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Customers</div>
+          <ul class="nav-menu">
+            <li>
+              <a href="#">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 010 7.75"/>
+                </svg>
+                All Customers
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                </svg>
+                Inquiries
+                <span class="badge">2</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Settings</div>
+          <ul class="nav-menu">
+            <li>
+              <a href="#">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 1v6m0 6v6m4.22-11.78l-4.25 4.25m0 0L7.22 16.22m9.56 0l-4.25-4.25m0 0L7.22 7.22"/>
+                </svg>
+                General
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                  <circle cx="8.5" cy="7" r="4"/>
+                  <polyline points="17 11 19 13 23 9"/>
+                </svg>
+                Team Access
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="admin-main">
+      <header class="admin-header">
+        <div class="admin-header-top">
+          <div>
+            <h2 class="admin-title">Dashboard</h2>
+            <p class="admin-subtitle">Welcome back — here's what's happening today</p>
+          </div>
+          <div class="admin-actions">
+            <button class="btn btn-secondary">
+              <svg style="width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+              Search
+            </button>
+            <button class="btn btn-primary">
+              <svg style="width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;" viewBox="0 0 24 24">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              Add Item
+            </button>
+          </div>
+        </div>
+      </header>
+      
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Inventory</div>
+          <div class="stat-value">247</div>
+          <div class="stat-change positive">
+            ↑ 12 this week
+          </div>
+        </div>
+        <div class="stat-card accent-pink">
+          <div class="stat-label">Active Orders</div>
+          <div class="stat-value">8</div>
+          <div class="stat-change positive">
+            ↑ 3 new
+          </div>
+        </div>
+        <div class="stat-card accent-purple">
+          <div class="stat-label">Pending Inquiries</div>
+          <div class="stat-value">5</div>
+          <div class="stat-change negative">
+            ↓ 2 resolved
+          </div>
+        </div>
+        <div class="stat-card accent-yellow">
+          <div class="stat-label">Revenue (MTD)</div>
+          <div class="stat-value">$18.4k</div>
+          <div class="stat-change positive">
+            ↑ 22% vs last
+          </div>
+        </div>
+      </div>
+      
+      <!-- Main Content Grid -->
+      <div class="content-grid">
+        <div class="panel">
+          <div class="panel-header">
+            <h3 class="panel-title">Recent Inventory</h3>
+            <p class="panel-subtitle">Latest additions and updates</p>
+          </div>
+          <div class="panel-body">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Carat</th>
+                  <th>Cut</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="gem-name">
+                      <span class="gem-indicator ruby"></span>
+                      Burmese Ruby
+                    </div>
+                    <div class="gem-type">Pigeon Blood</div>
+                  </td>
+                  <td>2.14ct</td>
+                  <td>Cushion</td>
+                  <td>$8,500</td>
+                  <td><span class="status-tag in-stock">In Stock</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="gem-name">
+                      <span class="gem-indicator emerald"></span>
+                      Colombian Emerald
+                    </div>
+                    <div class="gem-type">AAA Grade</div>
+                  </td>
+                  <td>3.45ct</td>
+                  <td>Oval</td>
+                  <td>$12,200</td>
+                  <td><span class="status-tag reserved">Reserved</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="gem-name">
+                      <span class="gem-indicator sapphire"></span>
+                      Kashmir Sapphire
+                    </div>
+                    <div class="gem-type">Cornflower Blue</div>
+                  </td>
+                  <td>1.98ct</td>
+                  <td>Round</td>
+                  <td>$15,800</td>
+                  <td><span class="status-tag in-stock">In Stock</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="gem-name">
+                      <span class="gem-indicator topaz"></span>
+                      Imperial Topaz
+                    </div>
+                    <div class="gem-type">Brazilian</div>
+                  </td>
+                  <td>4.20ct</td>
+                  <td>Emerald</td>
+                  <td>$3,200</td>
+                  <td><span class="status-tag low-stock">Low Stock</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="gem-name">
+                      <span class="gem-indicator ruby"></span>
+                      Mozambique Ruby
+                    </div>
+                    <div class="gem-type">Vivid Red</div>
+                  </td>
+                  <td>1.75ct</td>
+                  <td>Oval</td>
+                  <td>$5,900</td>
+                  <td><span class="status-tag in-stock">In Stock</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div>
+          <div class="panel" style="margin-bottom: 1.5rem;">
+            <div class="panel-header">
+              <h3 class="panel-title">Recent Activity</h3>
+              <p class="panel-subtitle">Last 24 hours</p>
+            </div>
+            <div class="activity-feed">
+              <div class="activity-item">
+                <div class="activity-icon">
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="9" cy="21" r="1"/>
+                    <circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
+                  </svg>
+                </div>
+                <div class="activity-content">
+                  <div class="activity-text">
+                    <strong>Sarah Chen</strong> placed order #1834 for Colombian Emerald
+                  </div>
+                  <div class="activity-time">2 hours ago</div>
+                </div>
+              </div>
+              
+              <div class="activity-item">
+                <div class="activity-icon">
+                  <svg viewBox="0 0 24 24">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                </div>
+                <div class="activity-content">
+                  <div class="activity-text">
+                    Added <strong>Burmese Ruby (2.14ct)</strong> to inventory
+                  </div>
+                  <div class="activity-time">5 hours ago</div>
+                </div>
+              </div>
+              
+              <div class="activity-item">
+                <div class="activity-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                  </svg>
+                </div>
+                <div class="activity-content">
+                  <div class="activity-text">
+                    <strong>New inquiry</strong> about custom engagement ring design
+                  </div>
+                  <div class="activity-time">8 hours ago</div>
+                </div>
+              </div>
+              
+              <div class="activity-item">
+                <div class="activity-icon">
+                  <svg viewBox="0 0 24 24">
+                    <polyline points="9 11 12 14 22 4"/>
+                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+                  </svg>
+                </div>
+                <div class="activity-content">
+                  <div class="activity-text">
+                    Quality inspection completed for <strong>5 items</strong>
+                  </div>
+                  <div class="activity-time">12 hours ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="panel">
+            <div class="panel-header">
+              <h3 class="panel-title">Quick Actions</h3>
+            </div>
+            <div class="quick-actions">
+              <a href="#" class="quick-action">
+                <svg viewBox="0 0 24 24">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                <div class="quick-action-label">Add Gemstone</div>
+              </a>
+              <a href="#" class="quick-action">
+                <svg viewBox="0 0 24 24">
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                </svg>
+                <div class="quick-action-label">Generate Report</div>
+              </a>
+              <a href="#" class="quick-action">
+                <svg viewBox="0 0 24 24">
+                  <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                <div class="quick-action-label">Export Data</div>
+              </a>
+              <a href="#" class="quick-action">
+                <svg viewBox="0 0 24 24">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <div class="quick-action-label">Send Email</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

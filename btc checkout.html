@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — Beneath the Crescent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Authorize.Net Accept.js -->
+  <script src="https://jstest.authorize.net/v1/Accept.js" charset="utf-8"></script>
+  <style>
+    /* Beneath the Crescent Design System[cite: 2] */
+    :root {
+      --bg-deep: #2a2440;
+      --bg-panel: #342e4c;
+      --bg-elevated: #403a5c;
+      --text: #faf8ff;
+      --text-muted: #c4bdd9;
+      --teal: #5ec8c4;
+      --teal-muted: #3a9e9a;
+      --pink: #ea8cc8;
+      --purple: #9b86ea;
+      --purple-deep: #6e54c8;
+      --yellow: #f2e078;
+      --border: rgba(155, 134, 234, 0.32);
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-body: "Outfit", system-ui, sans-serif;
+      --radius: 12px;
+      --shadow: 0 20px 44px rgba(22, 14, 40, 0.28);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse 130% 90% at 50% -10%, rgba(94, 200, 196, 0.2), transparent 55%),
+        radial-gradient(ellipse 70% 55% at 0% 85%, rgba(234, 140, 200, 0.14), transparent 50%);
+    }
+
+    /* Navigation[cite: 2] */
+    nav {
+      position: sticky; top: 0; z-index: 900;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 72px;
+      background: rgba(42, 36, 64, 0.88); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .brand { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; color: var(--text); }
+    .brand-name { font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; letter-spacing: 0.04em; }
+
+    /* Layout Structure[cite: 3] */
+    .checkout-wrap {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 3rem;
+      max-width: 1200px; margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    .section-heading { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 2rem; color: var(--text); }
+
+    /* Blocks & Fields[cite: 3] */
+    .card-block {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .card-block::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent-gradient, var(--teal));
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .block-label {
+      font-family: var(--font-display); font-size: 1.5rem; font-weight: 600;
+      color: var(--text); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;
+    }
+
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .full { grid-column: 1 / -1; }
+    
+    .field label { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .field input, .field select {
+      width: 100%; padding: 0.85rem; background: var(--bg-elevated);
+      border: 1px solid var(--border); border-radius: 8px; color: var(--text);
+      font-family: inherit; font-size: 1rem; outline: none; transition: 0.2s;
+    }
+    .field input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(94, 200, 196, 0.2); }
+
+    /* Shipping Options[cite: 3] */
+    .ship-option {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem; cursor: pointer; margin-bottom: 0.75rem;
+    }
+    .ship-option:has(input:checked) { border-color: var(--pink); background: rgba(234, 140, 200, 0.05); }
+    .ship-option-name { font-weight: 600; color: var(--text); }
+    .ship-option-price { margin-left: auto; color: var(--teal); font-weight: 700; }
+
+    /* Summary Sidebar[cite: 3] */
+    .order-summary { position: sticky; top: 100px; height: fit-content; }
+    .summary-card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .summary-header { padding: 1.5rem; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--border); }
+    .summary-items { padding: 1.5rem; }
+    .summary-item { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .item-title { font-family: var(--font-display); font-size: 1.1rem; }
+    
+    .totals { padding: 1.5rem; border-top: 1px solid var(--border); }
+    .total-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--text-muted); }
+    .grand-total { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 1.4rem; color: var(--text); font-family: var(--font-display); }
+    .grand-val { color: var(--yellow); }
+
+    .btn-place-order {
+      width: 100%; padding: 1.25rem; margin-top: 1.5rem;
+      background: linear-gradient(135deg, var(--purple-deep), var(--teal-muted));
+      border: none; border-radius: 999px; color: white;
+      font-family: var(--font-body); font-weight: 700; font-size: 1.1rem;
+      cursor: pointer; transition: 0.3s;
+    }
+    .btn-place-order:hover { transform: translateY(-2px); box-shadow: var(--shadow); filter: brightness(1.1); }
+
+    /* Success Overlay[cite: 3] */
+    .success-overlay {
+      position: fixed; inset: 0; background: rgba(22, 14, 40, 0.95);
+      backdrop-filter: blur(10px); display: none; place-items: center; z-index: 1000;
+    }
+    .success-overlay.show { display: grid; }
+    .success-box { background: var(--bg-panel); border: 1px solid var(--border); padding: 4rem; border-radius: var(--radius); text-align: center; max-width: 500px; }
+    
+    @media (max-width: 950px) {
+      .checkout-wrap { grid-template-columns: 1fr; }
+      .order-summary { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="brand" href="index.html">
+    <span class="brand-name">Beneath the Crescent</span>
+  </a>
+</nav>
+
+<div class="checkout-wrap">
+  <div class="checkout-left">
+    <h1 class="section-heading">Secure Checkout</h1>
+
+    <!-- Contact[cite: 3] -->
+    <div class="card-block" style="--accent-gradient: var(--teal)">
+      <div class="block-label"><span>✨</span> Client Information</div>
+      <div class="field-grid">
+        <div class="field"><label>First Name</label><input type="text" placeholder="Crystal" id="fname"></div>
+        <div class="field"><label>Last Name</label><input type="text" placeholder="Miner" id="lname"></div>
+        <div class="field full"><label>Email Address</label><input type="email" placeholder="hello@example.com" id="email"></div>
+      </div>
+    </div>
+
+    <!-- Shipping[cite: 3] -->
+    <div class="card-block" style="--accent-gradient: var(--purple)">
+      <div class="block-label"><span>📦</span> Shipping Destination</div>
+      <div class="field-grid">
+        <div class="field full"><label>Street Address</label><input type="text" placeholder="123 Gemstone Way"></div>
+        <div class="field"><label>City</label><input type="text" placeholder="Glendora"></div>
+        <div class="field"><label>State</label><input type="text" placeholder="NJ"></div>
+      </div>
+      <div style="margin-top: 1.5rem;">
+        <label class="ship-option">
+          <input type="radio" name="ship" checked>
+          <div class="ship-option-name">Insured Gallery Shipping</div>
+          <div class="ship-option-price">$15.00</div>
+        </label>
+        <label class="ship-option">
+          <input type="radio" name="ship">
+          <div class="ship-option-name">Express Overnight</div>
+          <div class="ship-option-price">$35.00</div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Payment[cite: 3] -->
+    <div class="card-block" style="--accent-gradient: var(--yellow)">
+      <div class="block-label"><span>💳</span> Secure Payment</div>
+      <div class="field-grid">
+        <div class="field full"><label>Card Number</label><input type="text" id="cardNum" placeholder="•••• •••• •••• ••••"></div>
+        <div class="field"><label>Expiry</label><input type="text" placeholder="MM / YY"></div>
+        <div class="field"><label>CVV</label><input type="text" placeholder="•••"></div>
+      </div>
+      <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;">Processed securely via Authorize.Net · PCI-DSS Compliant[cite: 3]</p>
+    </div>
+  </div>
+
+  <!-- Summary Sidebar[cite: 3] -->
+  <aside class="order-summary">
+    <div class="summary-card">
+      <div class="summary-header">
+        <h2 style="font-family: var(--font-display); font-size: 1.5rem;">Order Summary</h2>
+      </div>
+      <div class="summary-items" id="summaryItems">
+        <div class="summary-item">
+          <div>
+            <div class="item-title">Teal Montana Sapphire[cite: 1]</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Loose Stone</div>
+          </div>
+          <div style="font-weight: 600;">$840.00</div>
+        </div>
+      </div>
+      <div class="totals">
+        <div class="total-row"><span>Subtotal</span><span>$840.00</span></div>
+        <div class="total-row"><span>Shipping</span><span>$15.00</span></div>
+        <div class="total-row grand-total"><span>Total</span><span class="grand-val">$855.00</span></div>
+        <button class="btn-place-order" onclick="showSuccess()">Place Your Order</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- Success Overlay[cite: 3] -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-box">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">✨</div>
+    <h2 style="font-family: var(--font-display); font-size: 2.5rem; color: var(--teal); margin-bottom: 1rem;">Order Received</h2>
+    <p style="color: var(--text-muted); margin-bottom: 2rem;">Your treasures have been reserved. A confirmation email is on its way[cite: 3].</p>
+    <a href="index.html" style="color: var(--pink); text-decoration: none; font-weight: 600;">Return to Gallery</a>
+  </div>
+</div>
+
+<script>
+  function showSuccess() {
+    document.getElementById('successOverlay').classList.add('show');
+  }
+
+  // Basic card formatting[cite: 3]
+  document.getElementById('cardNum').addEventListener('input', function (e) {
+    e.target.value = e.target.value.replace(/[^\d]/g, '').replace(/(.{4})/g, '$1 ').trim();
+  });
+</script>
+
+</body>
+</html>
